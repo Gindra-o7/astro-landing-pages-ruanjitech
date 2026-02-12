@@ -1,0 +1,56 @@
+---
+import { MessageSquare, Code, Rocket } from "lucide-astro";
+import { getLangFromUrl, useTranslations } from "../../../i18n/utils";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const steps = [
+  {
+    number: "01",
+    title: t("process.1.title"),
+    description: t("process.1.desc"),
+    icon: MessageSquare,
+  },
+  {
+    number: "02",
+    title: t("process.2.title"),
+    description: t("process.2.desc"),
+    icon: Code,
+  },
+  {
+    number: "03",
+    title: t("process.3.title"),
+    description: t("process.3.desc"),
+    icon: Rocket,
+  },
+];
+---
+
+<section class="py-20 bg-white border-t border-slate-100" id="how-we-work">
+  <div class="container mx-auto px-6 max-w-7xl">
+    <div class="text-center mb-16">
+      <h2 class="text-3xl lg:text-4xl font-bold text-slate-900 mb-4">{t("process.title")}</h2>
+      <p class="text-slate-600 max-w-2xl mx-auto">{t("process.desc")}</p>
+    </div>
+
+    <div class="relative grid grid-cols-1 md:grid-cols-3 gap-8">
+      {/* Connector Line (Desktop) */}
+      <div class="hidden md:block absolute top-12 left-[16%] right-[16%] h-0.5 bg-slate-100 -z-10"></div>
+
+      {
+        steps.map((step) => (
+          <div class="relative flex flex-col items-center text-center group">
+            <div class="w-24 h-24 rounded-full bg-white border-8 border-slate-50 flex items-center justify-center mb-6 group-hover:border-blue-50 group-hover:scale-110 transition-all duration-300 shadow-sm">
+              <step.icon class="w-8 h-8 text-brand-primary" />
+            </div>
+            <div class="absolute top-0 right-1/2 translate-x-12 -translate-y-2 w-8 h-8 rounded-full bg-brand-primary text-white flex items-center justify-center text-xs font-bold border-4 border-white">{step.number}</div>
+
+            <h3 class="text-xl font-bold text-slate-900 mb-3">{step.title}</h3>
+            <p class="text-slate-600 text-sm leading-relaxed px-4">{step.description}</p>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

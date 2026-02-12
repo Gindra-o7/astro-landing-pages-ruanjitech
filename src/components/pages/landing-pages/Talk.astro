@@ -1,0 +1,22 @@
+---
+import { MessageCircle } from "lucide-astro";
+import { getLangFromUrl, useTranslations } from "../../../i18n/utils";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+
+<section class="py-24 bg-slate-900 text-white border-t border-slate-800">
+  <div class="container mx-auto px-6 max-w-4xl text-center">
+    <h2 class="text-3xl lg:text-5xl font-bold mb-6 tracking-tight">
+      {t("talk.title")}
+    </h2>
+    <p class="text-xl text-slate-400 mb-10 max-w-2xl mx-auto leading-relaxed">
+      {t("talk.desc")}
+    </p>
+    <a href="#" class="inline-flex items-center gap-3 px-8 py-4 bg-white text-slate-900 rounded-full font-bold hover:bg-slate-200 transition-all transform hover:-translate-y-1 shadow-lg hover:shadow-xl">
+      <MessageCircle class="w-5 h-5 text-brand-primary" />
+      <span>{t("talk.cta")}</span>
+    </a>
+  </div>
+</section>

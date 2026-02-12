@@ -1,0 +1,59 @@
+---
+import { Code, Database, ArrowRight } from "lucide-astro";
+import { getLangFromUrl, useTranslations } from "../../../i18n/utils";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const services = [
+  {
+    title: t("services.1.title"),
+    description: t("services.1.desc"),
+    icon: Code,
+    features: [t("services.1.f1"), t("services.1.f2"), t("services.1.f3")],
+  },
+  {
+    title: t("services.2.title"),
+    description: t("services.2.desc"),
+    icon: Database,
+    features: [t("services.2.f1"), t("services.2.f2"), t("services.2.f3")],
+  },
+];
+---
+
+<section class="py-20 bg-slate-50 border-y border-slate-200" id="what-we-do">
+  <div class="container mx-auto px-6 max-w-7xl">
+    <div class="text-center mb-16">
+      <h2 class="text-3xl lg:text-4xl font-bold text-slate-900 mb-4">{t("services.title")}</h2>
+      <p class="text-slate-600 max-w-2xl mx-auto">{t("services.desc")}</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+      {
+        services.map((service) => (
+          <div class="bg-white p-8 rounded-2xl border border-slate-200 hover:border-brand-primary/50 hover:shadow-xl hover:shadow-brand-primary/5 transition-all duration-300 group">
+            <div class="w-12 h-12 bg-slate-100 rounded-xl flex items-center justify-center mb-6 group-hover:bg-brand-primary group-hover:text-white transition-colors duration-300">
+              <service.icon class="w-6 h-6 text-slate-700 group-hover:text-white" />
+            </div>
+            <h3 class="text-xl font-bold text-slate-900 mb-3">{service.title}</h3>
+            <p class="text-slate-600 mb-6 text-sm leading-relaxed">{service.description}</p>
+
+            <ul class="space-y-2 mb-8">
+              {service.features.map((feature) => (
+                <li class="flex items-center gap-2 text-sm text-slate-500">
+                  <div class="w-1.5 h-1.5 rounded-full bg-brand-primary/40" />
+                  {feature}
+                </li>
+              ))}
+            </ul>
+
+            <a href="#" class="inline-flex items-center gap-2 text-brand-primary font-medium text-sm group-hover:gap-3 transition-all">
+              {t("services.learn_more")}
+              <ArrowRight class="w-4 h-4" />
+            </a>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

@@ -1,0 +1,125 @@
+---
+import { Quote, ChevronLeft, ChevronRight } from "lucide-astro";
+import { getLangFromUrl, useTranslations } from "../../../i18n/utils";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const clients = [
+  { name: "Handarin", quote: t("testimonials.handarin"), image: null, className: "" },
+  { name: "Cici Mandarin", quote: t("testimonials.cicimandarin"), image: "/cici-mandarin.svg", className: "bg-slate-900 p-4" },
+  { name: "Mornight", quote: t("testimonials.mornight"), image: null, className: "" },
+  { name: "STIE Pancasetia", quote: t("testimonials.stie_pancasetia"), image: "/stie-pancasetia.svg", className: "bg-slate-900 p-4" },
+  { name: "STIE Mahardhika", quote: t("testimonials.stie_mahardhika"), image: "/stie-mahardhika.png", className: "p-0" },
+];
+---
+
+<section class="py-20 bg-white border-b border-slate-200">
+  <div class="container mx-auto px-6 max-w-4xl">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl lg:text-4xl font-bold text-slate-900">{t("testimonials.title")}</h2>
+    </div>
+
+    <div class="relative">
+      <!-- Carousel Container -->
+      <div class="overflow-hidden relative min-h-[300px] flex items-center justify-center">
+        {
+          clients.map((client, index) => (
+            <div
+              class="client-slide absolute inset-0 flex flex-col items-center justify-center text-center transition-all duration-500 ease-in-out opacity-0 translate-x-12 pointer-events-none"
+              data-index={index}
+            >
+              <!-- Dedicated Icon/Image Container -->
+              <div 
+                class={`icon-container mb-6 rounded-full inline-flex items-center justify-center text-brand-primary w-24 h-24 ${
+                  client.image ? (client.className || 'p-4') : 'bg-brand-primary/5 p-4'
+                }`}
+              >
+                {client.image ? (
+                  <img
+                    src={client.image}
+                    alt={client.name}
+                    class="w-full h-full object-contain"
+                  />
+                ) : (
+                  <Quote class="w-10 h-10 fill-current" />
+                )}
+              </div>
+
+              <p class="text-xl md:text-2xl text-slate-700 italic leading-relaxed max-w-2xl mb-8">"{client.quote}"</p>
+
+              <div class="w-12 h-1 bg-brand-primary/20 rounded-full mb-4" />
+              <h4 class="font-bold text-lg text-slate-900">{client.name}</h4>
+            </div>
+          ))
+        }
+      </div>
+
+      <!-- Navigation Buttons -->
+      <button
+        id="prev-btn"
+        class="absolute left-0 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full bg-white border border-slate-200 text-slate-500 hover:bg-slate-50 hover:text-brand-primary transition-all shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20"
+        aria-label="Previous testimonial"
+      >
+        <ChevronLeft class="w-6 h-6" />
+      </button>
+      <button
+        id="next-btn"
+        class="absolute right-0 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full bg-white border border-slate-200 text-slate-500 hover:bg-slate-50 hover:text-brand-primary transition-all shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20"
+        aria-label="Next testimonial"
+      >
+        <ChevronRight class="w-6 h-6" />
+      </button>
+    </div>
+  </div>
+</section>
+
+<script>
+  function initCarousel() {
+    const slides = document.querySelectorAll(".client-slide");
+    const prevBtn = document.getElementById("prev-btn");
+    const nextBtn = document.getElementById("next-btn");
+    let currentIndex = 0;
+
+    if (!slides.length) return;
+
+    function showSlide(index: number, direction: "next" | "prev" = "next") {
+      // Hide all slides
+      slides.forEach((slide) => {
+        slide.classList.remove("opacity-100", "translate-x-0", "pointer-events-auto", "z-10");
+        slide.classList.add("opacity-0", "pointer-events-none");
+        
+        // Reset position for animation
+        slide.classList.remove("-translate-x-12", "translate-x-12");
+      });
+
+      // Show current slide
+      const currentSlide = slides[index];
+      currentSlide.classList.remove("opacity-0", "pointer-events-none");
+      currentSlide.classList.add("opacity-100", "translate-x-0", "pointer-events-auto", "z-10");
+    }
+
+    // Initialize first slide
+    showSlide(currentIndex);
+
+    function nextSlide() {
+      currentIndex = (currentIndex + 1) % slides.length;
+      showSlide(currentIndex, "next");
+    }
+
+    function prevSlide() {
+      currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+      showSlide(currentIndex, "prev");
+    }
+
+    nextBtn?.addEventListener("click", nextSlide);
+    prevBtn?.addEventListener("click", prevSlide);
+    
+    // Auto advance every 5 seconds
+    // setInterval(nextSlide, 5000);
+  }
+
+  // Run on initial load and view transitions
+  document.addEventListener("DOMContentLoaded", initCarousel);
+  document.addEventListener("astro:page-load", initCarousel);
+</script>

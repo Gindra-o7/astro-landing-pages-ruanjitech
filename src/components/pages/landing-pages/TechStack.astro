@@ -1,0 +1,70 @@
+---
+const technologies = [
+  {
+    name: "React",
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="2"></circle></svg>`,
+    // Using simple placeholder icons for demo if actual logos aren't available as components.
+    // Ideally use simple-icons or explicit SVGs. I will use text for now to be safe or simple SVG shapes.
+    // Actually, let's use explicit SVG paths for the requested stack to look good.
+  },
+];
+
+// SVG Paths for brands
+const brands = [
+  {
+    name: "Astro",
+    path: "M12 5.5l-8 16h16l-8-16zm-1 12l2-4 2 4h-4z M17.4 19c-.6-1.6-1.4-3.1-2.2-4.6 2.1 1.6 3.6 3.9 3.8 6.6H7c.2-2.7 1.7-5 3.8-6.6-.8 1.5-1.6 3-2.2 4.6h8.8z", // Simplified Astro-like shape
+    viewBox: "0 0 24 24",
+  },
+  {
+    name: "React",
+    path: "M12 2.5c-5.9 0-10.4 3.4-11.8 8.5 0 .3 0 .7 0 1 .4-5 4.8-8.5 10.8-8.5 6 0 10.4 3.5 10.8 8.5 0-.3 0-.7 0-1-1.4-5.1-5.9-8.5-11.8-8.5z m0 19c5.9 0 10.4-3.4 11.8-8.5 0-.3 0-.7 0-1-.4 5-4.8 8.5-10.8 8.5-6 0-10.4-3.5-10.8-8.5 0 .3 0 .7 0 1 1.4 5.1 5.9 8.5 11.8 8.5z m0-6c-1.9 0-3.5-1.6-3.5-3.5s1.6-3.5 3.5-3.5 3.5 1.6 3.5 3.5-1.6 3.5-3.5 3.5z",
+    viewBox: "0 0 24 24",
+  },
+  {
+    name: "PostgreSQL",
+    path: "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z M12 6c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6z", // Generic DB shape
+    viewBox: "0 0 24 24",
+  },
+  {
+    name: "Python",
+    path: "M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z", // Generic circle for now
+    viewBox: "0 0 24 24",
+  },
+];
+// Note: For a real production app I would import specific brand icons from a library like simple-icons-astro
+// But for now I'll use text labels and generic lucide icons to ensure it works without extra deps.
+import { Database, Code2, Server, Globe } from "lucide-astro";
+import { getLangFromUrl, useTranslations } from "../../../i18n/utils";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const techStack = [
+  { name: "React", icon: Code2, color: "text-blue-500" },
+  { name: "Astro", icon: Globe, color: "text-orange-500" },
+  { name: "PostgreSQL", icon: Database, color: "text-blue-600" },
+  { name: "Node.js", icon: Server, color: "text-green-500" },
+];
+---
+
+<section class="py-16 bg-white">
+  <div class="container mx-auto px-6 max-w-7xl">
+    <div class="text-center mb-10">
+      <h3 class="text-lg font-semibold text-slate-500 uppercase tracking-wider">{t("techstack.title")}</h3>
+    </div>
+
+    <div class="flex flex-wrap justify-center items-center gap-12 md:gap-20 opacity-70">
+      {
+        techStack.map((tech) => (
+          <div class="flex flex-col items-center gap-3 group cursor-default transition-opacity hover:opacity-100">
+            <div class={`p-4 rounded-2xl bg-slate-50 group-hover:bg-white group-hover:shadow-lg transition-all duration-300 border border-transparent group-hover:border-slate-100`}>
+              <tech.icon class={`w-10 h-10 text-slate-400 group-hover:${tech.color} transition-colors`} />
+            </div>
+            <span class="text-sm font-medium text-slate-500 group-hover:text-slate-900 transition-colors">{tech.name}</span>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
