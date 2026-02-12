@@ -1,0 +1,223 @@
+---
+import { ArrowRight, Rocket, Github, Twitter } from "@lucide/astro";
+import { Send } from "lucide-astro";
+import { getLangFromUrl, useTranslations } from "../../../i18n/utils";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const updates = [
+  {
+    version: "v3.0.0",
+    date: "Feb 2026",
+    title: "Indonesian Stocks (IHSG)",
+    description: "Full support for IDX market data with real-time delays under 200ms.",
+    badge: "New Market",
+    badgeColor: "#BFFF00",
+  },
+  {
+    version: "v2.8.5",
+    date: "Jan 2026",
+    title: "Auto-Pattern Recognition",
+    description: "AI automatically detects Head & Shoulders, Double Top/Bottom, and Triangle patterns.",
+    badge: "AI Feature",
+    badgeColor: "#66FCF1",
+  },
+  {
+    version: "v2.8.0",
+    date: "Jan 2026",
+    title: "Multi-Timeframe Analysis",
+    description: "Request charts for 15m, 1h, 4h, and Daily timeframes instantly.",
+    badge: "Core Update",
+    badgeColor: "#45A29E",
+  },
+];
+
+const partners = [
+  { name: "Ethereum", logo: "ETH" },
+  { name: "Polygon", logo: "MATIC" },
+  { name: "Binance", logo: "BNB" },
+  { name: "Solana", logo: "SOL" },
+  { name: "Avalanche", logo: "AVAX" },
+];
+---
+
+<section class="bg-brand-surface/30 py-20 lg:py-32 relative overflow-hidden" id="updates-section">
+  <!-- Background -->
+  <div class="absolute inset-0 bg-gradient-to-b from-brand-background via-transparent to-brand-background"></div>
+  <div class="absolute inset-0 opacity-[0.015] grid-pattern"></div>
+
+  <!-- Glowing Orbs -->
+  <div class="absolute top-1/4 right-0 w-96 h-96 bg-brand-primary/5 rounded-full blur-[150px]"></div>
+  <div class="absolute bottom-1/4 left-0 w-96 h-96 bg-[#BFFF00]/5 rounded-full blur-[150px]"></div>
+
+  <div class="container mx-auto px-6 max-w-7xl relative z-10">
+    <!-- Section Header -->
+    <div class="text-center mb-16 space-y-4 updates-header">
+      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[#BFFF00]/30 bg-[#BFFF00]/5">
+        <Rocket class="w-4 h-4 text-[#BFFF00]" />
+        <span class="text-sm text-[#BFFF00] font-medium uppercase tracking-wider">{t("pengumuman.section.badge")}</span>
+      </div>
+      <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white">
+        {t("pengumuman.section.title")}
+        <span class="text-glow bg-gradient-to-r from-brand-primary to-[#BFFF00] bg-clip-text text-transparent">{t("pengumuman.section.title.highlight")}</span>
+      </h2>
+      <p class="text-[#C5C6C7] max-w-2xl mx-auto text-lg">{t("pengumuman.section.desc")}</p>
+    </div>
+
+    <!-- Updates Timeline -->
+    <div class="updates-grid grid grid-cols-1 lg:grid-cols-3 gap-6 mb-20">
+      {
+        updates.map((update, i) => (
+          <div class="update-card group relative p-6 rounded-2xl bg-brand-background/50 backdrop-blur-sm border border-white/5 hover:border-brand-primary/30 transition-all duration-500">
+            {/* Glow effect on hover */}
+            <div class="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={`box-shadow: 0 0 40px ${update.badgeColor}10`} />
+
+            {/* Header */}
+            <div class="flex items-center justify-between mb-4 relative z-10">
+              <div class="flex items-center gap-3">
+                <span class="text-white/60 font-mono text-sm">{update.version}</span>
+                <span class="text-[#C5C6C7]/60 text-sm">•</span>
+                <span class="text-[#C5C6C7]/60 text-sm">{update.date}</span>
+              </div>
+              <span class="px-2 py-1 rounded-md text-xs font-semibold" style={`background: ${update.badgeColor}15; color: ${update.badgeColor}`}>
+                {update.badge}
+              </span>
+            </div>
+
+            {/* Content */}
+            <h3 class="text-xl font-bold text-white mb-2 group-hover:text-brand-primary transition-colors relative z-10">{update.title}</h3>
+            <p class="text-[#C5C6C7]/80 text-sm leading-relaxed relative z-10">{update.description}</p>
+
+            {/* Bottom border glow */}
+            <div class="absolute bottom-0 left-0 right-0 h-px opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={`background: linear-gradient(90deg, transparent, ${update.badgeColor}, transparent)`} />
+          </div>
+        ))
+      }
+    </div>
+
+    <!-- Supported Networks -->
+    <div class="mb-20 supported-networks">
+      <p class="text-center text-[#C5C6C7]/60 text-sm uppercase tracking-wider mb-8">{t("pengumuman.supported")}</p>
+      <div class="flex flex-wrap justify-center items-center gap-8 lg:gap-12">
+        {
+          partners.map((partner, i) => (
+            <div class="partner-item flex items-center gap-2 px-4 py-2 rounded-lg bg-brand-surface/30 border border-white/5 hover:border-brand-primary/20 transition-all duration-300">
+              <div class="w-8 h-8 rounded-full bg-brand-primary/10 flex items-center justify-center">
+                <span class="text-brand-primary font-bold text-xs">{partner.logo}</span>
+              </div>
+              <span class="text-white/70 font-medium">{partner.name}</span>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="relative p-8 lg:p-12 rounded-3xl bg-gradient-to-r from-brand-surface/60 to-brand-surface/40 backdrop-blur-xl border border-white/10 overflow-hidden cta-box">
+      {/* Background decoration */}
+      <div class="absolute top-0 right-0 w-64 h-64 bg-[#BFFF00]/10 rounded-full blur-[100px]"></div>
+      <div class="absolute bottom-0 left-0 w-64 h-64 bg-brand-primary/10 rounded-full blur-[100px]"></div>
+
+      <div class="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-8">
+        <div class="text-center lg:text-left">
+          <h3 class="text-2xl lg:text-3xl font-bold text-white mb-3">{t("pengumuman.cta.title")}</h3>
+          <p class="text-[#C5C6C7] max-w-xl">{t("pengumuman.cta.desc")}</p>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-center gap-4">
+          <a
+            href={import.meta.env.TELEGRAM_BOT_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="group flex items-center gap-2 px-6 py-3 bg-[#BFFF00] text-brand-background font-bold rounded-xl hover:shadow-[0_0_30px_rgba(191,255,0,0.4)] transition-all duration-300"
+          >
+            <Send class="w-5 h-5" />
+            {t("pengumuman.cta.button")}
+            <ArrowRight class="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+          </a>
+
+          <div class="flex items-center gap-3">
+            <a href="#" class="p-3 rounded-xl bg-brand-surface/50 border border-white/10 hover:border-brand-primary/30 text-[#C5C6C7] hover:text-brand-primary transition-all duration-300">
+              <Github class="w-5 h-5" />
+            </a>
+            <a href="#" class="p-3 rounded-xl bg-brand-surface/50 border border-white/10 hover:border-brand-primary/30 text-[#C5C6C7] hover:text-brand-primary transition-all duration-300">
+              <Twitter class="w-5 h-5" />
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .grid-pattern {
+    background-image: linear-gradient(rgba(102, 252, 241, 0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(102, 252, 241, 0.3) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
+  .text-glow {
+    text-shadow:
+      0 0 40px rgba(102, 252, 241, 0.4),
+      0 0 80px rgba(102, 252, 241, 0.2);
+  }
+</style>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  document.addEventListener("astro:page-load", initAnimations);
+  document.addEventListener("DOMContentLoaded", initAnimations);
+
+  function initAnimations() {
+    gsap.from(".updates-header", {
+      scrollTrigger: {
+        trigger: ".updates-header",
+        start: "top 80%",
+      },
+      y: 30,
+      opacity: 0,
+      duration: 1,
+      ease: "power3.out",
+    });
+
+    gsap.from(".update-card", {
+      scrollTrigger: {
+        trigger: ".updates-grid",
+        start: "top 80%",
+      },
+      y: 40,
+      opacity: 0,
+      duration: 0.8,
+      stagger: 0.2,
+      ease: "power2.out",
+    });
+
+    gsap.from(".partner-item", {
+      scrollTrigger: {
+        trigger: ".supported-networks",
+        start: "top 85%",
+      },
+      scale: 0.5,
+      opacity: 0,
+      duration: 0.5,
+      stagger: 0.05,
+      ease: "back.out(1.5)",
+    });
+
+    gsap.from(".cta-box", {
+      scrollTrigger: {
+        trigger: ".cta-box",
+        start: "top 85%",
+      },
+      y: 50,
+      opacity: 0,
+      duration: 1,
+      ease: "power3.out",
+    });
+  }
+</script>
