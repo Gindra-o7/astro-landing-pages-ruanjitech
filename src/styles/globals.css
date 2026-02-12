@@ -1,8 +1,6 @@
 @import "tailwindcss";
 @import '@fontsource/pretendard';
 
-@import '@fontsource-variable/jost';
-
 :root {
   /* Brand Colors - Professional Slate & Indigo */
   --color-brand-primary: #4f46e5; /* Indigo 600 */
