@@ -22,11 +22,11 @@ const clients = [
 
     <div class="relative">
       <!-- Carousel Container -->
-      <div class="overflow-hidden relative min-h-[300px] flex items-center justify-center">
+      <div class="overflow-hidden relative min-h-[300px] grid grid-cols-1 place-items-center">
         {
           clients.map((client, index) => (
             <div
-              class="client-slide absolute inset-0 flex flex-col items-center justify-center text-center transition-all duration-500 ease-in-out opacity-0 translate-x-12 pointer-events-none"
+              class="client-slide col-start-1 row-start-1 w-full flex flex-col items-center justify-center text-center transition-all duration-500 ease-in-out opacity-0 translate-x-12 pointer-events-none"
               data-index={index}
             >
               <!-- Dedicated Icon/Image Container -->
@@ -55,17 +55,29 @@ const clients = [
         }
       </div>
 
-      <!-- Navigation Buttons -->
+      <!-- Pagination Dots -->
+      <!-- Pagination Dots -->
+      <div class="flex justify-center gap-2 mt-8 z-20 relative">
+        {clients.map((_, index) => (
+          <button
+            class="pagination-dot w-2.5 h-2.5 rounded-full bg-slate-300 hover:bg-brand-primary/60 transition-all duration-300 focus:outline-none"
+            aria-label={`Go to slide ${index + 1}`}
+            data-index={index}
+          />
+        ))}
+      </div>
+
+      <!-- Navigation Buttons (Desktop Only) -->
       <button
         id="prev-btn"
-        class="absolute left-0 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full bg-white border border-slate-200 text-slate-500 hover:bg-slate-50 hover:text-brand-primary transition-all shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20"
+        class="hidden lg:flex absolute left-0 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full bg-white border border-slate-200 text-slate-500 hover:bg-slate-50 hover:text-brand-primary transition-all shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20"
         aria-label="Previous testimonial"
       >
         <ChevronLeft class="w-6 h-6" />
       </button>
       <button
         id="next-btn"
-        class="absolute right-0 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full bg-white border border-slate-200 text-slate-500 hover:bg-slate-50 hover:text-brand-primary transition-all shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20"
+        class="hidden lg:flex absolute right-0 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full bg-white border border-slate-200 text-slate-500 hover:bg-slate-50 hover:text-brand-primary transition-all shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20"
         aria-label="Next testimonial"
       >
         <ChevronRight class="w-6 h-6" />
@@ -77,13 +89,26 @@ const clients = [
 <script>
   function initCarousel() {
     const slides = document.querySelectorAll(".client-slide");
+    const dots = document.querySelectorAll(".pagination-dot");
     const prevBtn = document.getElementById("prev-btn");
     const nextBtn = document.getElementById("next-btn");
     let currentIndex = 0;
 
     if (!slides.length) return;
 
-    function showSlide(index: number, direction: "next" | "prev" = "next") {
+    function updateDots(index: number) {
+      dots.forEach((dot, i) => {
+        if (i === index) {
+          dot.classList.remove("bg-slate-300", "hover:bg-brand-primary/60");
+          dot.classList.add("bg-brand-primary", "w-8");
+        } else {
+          dot.classList.add("bg-slate-300", "hover:bg-brand-primary/60");
+          dot.classList.remove("bg-brand-primary", "w-8");
+        }
+      });
+    }
+
+    function showSlide(index: number) {
       // Hide all slides
       slides.forEach((slide) => {
         slide.classList.remove("opacity-100", "translate-x-0", "pointer-events-auto", "z-10");
@@ -97,6 +122,8 @@ const clients = [
       const currentSlide = slides[index];
       currentSlide.classList.remove("opacity-0", "pointer-events-none");
       currentSlide.classList.add("opacity-100", "translate-x-0", "pointer-events-auto", "z-10");
+      
+      updateDots(index);
     }
 
     // Initialize first slide
@@ -104,19 +131,30 @@ const clients = [
 
     function nextSlide() {
       currentIndex = (currentIndex + 1) % slides.length;
-      showSlide(currentIndex, "next");
+      showSlide(currentIndex);
     }
 
     function prevSlide() {
       currentIndex = (currentIndex - 1 + slides.length) % slides.length;
-      showSlide(currentIndex, "prev");
+      showSlide(currentIndex);
     }
 
+    // Dot listeners
+    dots.forEach((dot, index) => {
+      dot.addEventListener("click", () => {
+        currentIndex = index;
+        showSlide(currentIndex);
+      });
+    });
+
+    // Arrow listeners
     nextBtn?.addEventListener("click", nextSlide);
     prevBtn?.addEventListener("click", prevSlide);
     
     // Auto advance every 5 seconds
-    // setInterval(nextSlide, 5000);
+    // setInterval(() => {
+    //   nextSlide();
+    // }, 5000);
   }
 
   // Run on initial load and view transitions

@@ -126,19 +126,26 @@ const navItems = [
     <button id="mobile-menu-btn" class="md:hidden z-50 p-2 text-slate-600 hover:bg-slate-50 rounded-lg">
       <Menu class="w-6 h-6" />
     </button>
+  </nav>
+</header>
 
-    <!-- Mobile Menu Overlay -->
-    <div id="mobile-menu" class="fixed inset-0 bg-white z-40 flex flex-col items-center justify-center gap-8 opacity-0 pointer-events-none transition-all duration-300">
-      <button id="close-menu-btn" class="absolute top-6 right-6 p-2 text-slate-600 hover:bg-slate-50 rounded-lg">
-        <X class="w-6 h-6" />
-      </button>
+<!-- Mobile Menu Overlay -->
+<div id="mobile-menu" class="fixed inset-0 bg-white z-[60] flex flex-col items-center justify-start pt-24 pb-8 px-6 gap-8 opacity-0 pointer-events-none transition-all duration-300 overflow-y-auto">
+  <button id="close-menu-btn" class="absolute top-6 right-6 p-2 text-slate-600 hover:bg-slate-50 rounded-lg">
+    <X class="w-6 h-6" />
+  </button>
 
-      {
-        navItems.map((item) =>
-          item.children ? (
-            <div class="text-center">
-              <span class="block text-2xl font-bold text-slate-900 mb-4">{item.label}</span>
-              <div class="flex flex-col gap-3">
+  {
+    navItems.map((item) =>
+      item.children ? (
+        <div class="w-full text-center">
+          <button class="mobile-accordion-btn flex items-center justify-center gap-2 w-full text-2xl font-bold text-slate-900 mb-4 hover:text-brand-primary transition-colors" aria-expanded="false">
+            {item.label}
+            <ChevronDown class="w-5 h-5 transition-transform duration-300" />
+          </button>
+          <div class="mobile-accordion-content grid grid-rows-[0fr] transition-all duration-300 ease-in-out border-b border-slate-100 last:border-0 pb-0 mb-0">
+            <div class="overflow-hidden">
+              <div class="flex flex-col gap-4 pb-4">
                 {item.children.map((child) => (
                   <a href={child.href} class={`text-lg ${child.isOverview ? "font-semibold text-brand-primary" : "text-slate-600"} hover:text-brand-primary transition-colors`}>
                     {child.label}
@@ -146,27 +153,27 @@ const navItems = [
                 ))}
               </div>
             </div>
-          ) : (
-            <a href={item.href} class="text-2xl font-bold text-slate-900 hover:text-brand-primary transition-colors">
-              {item.label}
-            </a>
-          ),
-        )
-      }
+          </div>
+        </div>
+      ) : (
+        <a href={item.href} class="text-2xl font-bold text-slate-900 hover:text-brand-primary transition-colors">
+          {item.label}
+        </a>
+      ),
+    )
+  }
 
-      <div class="flex gap-4 mt-8">
-        {
-          languages.map((l) => (
-            <a href={l.code === "id" ? "/id" : "/"} class={`flex items-center gap-2 px-4 py-2 rounded-full border ${lang === l.code ? "border-brand-primary text-brand-primary bg-brand-primary/5" : "border-slate-200 text-slate-600"}`}>
-              <span>{l.flag}</span>
-              <span>{l.name}</span>
-            </a>
-          ))
-        }
-      </div>
-    </div>
-  </nav>
-</header>
+  <div class="flex gap-4 mt-4 pb-8">
+    {
+      languages.map((l) => (
+        <a href={l.code === "id" ? "/id" : "/"} class={`flex items-center gap-2 px-4 py-2 rounded-full border ${lang === l.code ? "border-brand-primary text-brand-primary bg-brand-primary/5" : "border-slate-200 text-slate-600"}`}>
+          <span>{l.flag}</span>
+          <span>{l.name}</span>
+        </a>
+      ))
+    }
+  </div>
+</div>
 
 <script>
   function initMobileMenu() {
@@ -182,9 +189,43 @@ const navItems = [
 
     menuBtn?.addEventListener("click", toggleMenu);
     closeBtn?.addEventListener("click", toggleMenu);
-
     links?.forEach((link) => {
       link.addEventListener("click", toggleMenu);
+    });
+
+    // Accordion Logic
+    const accordionBtns = document.querySelectorAll(".mobile-accordion-btn");
+
+    accordionBtns.forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation(); // Prevent closing menu
+        const content = btn.nextElementSibling;
+        const icon = btn.querySelector("svg");
+        const isExpanded = btn.getAttribute("aria-expanded") === "true";
+
+        // Close other accordions
+        accordionBtns.forEach((otherBtn) => {
+          if (otherBtn !== btn) {
+            otherBtn.setAttribute("aria-expanded", "false");
+            otherBtn.parentElement?.querySelector(".mobile-accordion-content")?.classList.remove("grid-rows-[1fr]");
+            otherBtn.parentElement?.querySelector(".mobile-accordion-content")?.classList.add("grid-rows-[0fr]");
+            otherBtn.querySelector("svg")?.classList.remove("rotate-180");
+          }
+        });
+
+        // Toggle current
+        btn.setAttribute("aria-expanded", (!isExpanded).toString());
+
+        if (!isExpanded) {
+          content?.classList.remove("grid-rows-[0fr]");
+          content?.classList.add("grid-rows-[1fr]");
+          icon?.classList.add("rotate-180");
+        } else {
+          content?.classList.remove("grid-rows-[1fr]");
+          content?.classList.add("grid-rows-[0fr]");
+          icon?.classList.remove("rotate-180");
+        }
+      });
     });
   }
 
