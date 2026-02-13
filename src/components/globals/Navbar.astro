@@ -109,15 +109,17 @@ const navItems = [
         </button>
 
         <!-- Dropdown -->
-        <div class="absolute top-full right-0 mt-2 w-40 bg-white rounded-lg shadow-lg border border-slate-100 overflow-hidden hidden group-hover:block px-1 py-1">
-          {
-            languages.map((l) => (
-              <a href={l.code === "id" ? "/id" : "/"} class={`flex items-center gap-3 px-3 py-2 text-sm rounded-md transition-colors ${lang === l.code ? "bg-brand-primary/5 text-brand-primary" : "text-slate-600 hover:bg-slate-50"}`}>
-                <span>{l.flag}</span>
-                <span>{l.name}</span>
-              </a>
-            ))
-          }
+        <div class="absolute top-full right-0 pt-2 w-40 hidden group-hover:block z-50">
+          <div class="bg-white rounded-lg shadow-lg border border-slate-100 overflow-hidden px-1 py-1">
+            {
+              languages.map((l) => (
+                <a href={l.code === "id" ? "/id" : "/"} class={`flex items-center gap-3 px-3 py-2 text-sm rounded-md transition-colors ${lang === l.code ? "bg-brand-primary/5 text-brand-primary" : "text-slate-600 hover:bg-slate-50"}`}>
+                  <span>{l.flag}</span>
+                  <span>{l.name}</span>
+                </a>
+              ))
+            }
+          </div>
         </div>
       </div>
     </div>
